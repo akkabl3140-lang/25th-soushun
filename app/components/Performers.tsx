@@ -5,13 +5,13 @@ const performers = [
     name: '輪太鼓衆 転太鼓舞（てんてこまい）',
     description: '長岡造形大学の和太鼓サークルです。私たちは「輪になって楽しく太鼓を叩こう！」をコンセプトに、日々太鼓練習に打ち込んでいます。長岡市を中心として、県内各地のイベントやお祭りに参加し、元気よく活動中です。かけ声はいつも…「ちょいさー！」',
     image: '/image/tenteko.png',
-    members: ['azu', '福', 'ron', 'みやび', 'よしき', 'はち', 'はち', 'はち', 'はち', 'はち', 'はちはち', 'はち', 'はち', 'バチ', 'はち', 'はち', 'はまち', 'はち', 'ハッチ', 'はち', 'はち',  ]
+    members: ['ミニプ', '藍', '紫黄', 'ノラン', 'はち', '爽', 'アズ', '福', '海松', '四ツ葉', 'どん', '龍', 'メローポッシュー', '薫衣', '楽', 'ぴこぴーた', '茜蝶', 'るく', '翠心', '律', 'すす', 'ロズ', '燐葉']
   },
   {
     name: '悠久太鼓愛好会 つるかめ会',
     description: '長岡技術科学大学の和太鼓サークルです。長岡市内を中心に各種イベントや老人ホーム等の施設に訪問して演奏しています。また大花火大会で有名な"長岡まつり"をはじめ、夏のお祭りシーズンにおいては連日フル活動！！長岡市の至る所で我々の姿が見られるハズです！',
     image: '/image/turukame.png',
-    members: ['ともちゃん', 'ぐ', 'まゆきち', 'mo', 'UFO', 'ニキ', 'ニキ', 'ニキ', 'ニキ', 'ニキにき', 'ニキ', 'ニキネキ', 'ニキ', 'ニキ', 'ニキ', 'ニョッキ', 'ニキ', 'おニギり',]
+    members: ['ニキ', 'バキ', '中川', '阿部', 'サカノフ', 'ポッター', 'まひまひ', 'あかりん', 'グラタン', 'キンギョ', 'かくさん', 'ぐっさん', 'ゆらら', 'まゆきち', 'ともちゃん', 'もっちゃん']
   }
 ];
 export function Performers() {
@@ -27,7 +27,7 @@ export function Performers() {
             長岡で活動する学生和太鼓サークルが共演します
           </p>
         </div>
-        
+
         <div className="space-y-12">
           {performers.map((performer, index) => (
             <div
@@ -47,7 +47,7 @@ export function Performers() {
                 <div className="md:col-span-3 p-6 md:p-8">
                   <h3 className="text-3xl mb-3 border-b-2 border-cyan-600 pb-3">{performer.name}</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-6">{performer.description}</p>
-                  
+
                   <div>
                     <h4 className="text-cyan-700 mb-3 text-sm tracking-wider">出演者</h4>
                     <div className="flex flex-wrap gap-3">
