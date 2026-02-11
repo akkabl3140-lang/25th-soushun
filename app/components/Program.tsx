@@ -1,142 +1,94 @@
 const programs = [
   {
     number: 1,
-    title: '開会挨拶',
-    type: 'greeting',
-    note: ''
-  },
-  {
-    number: 2,
     title: '嵐人',
     type: 'performance',
     note: ''
   },
   {
-    number: 3,
+    number: 2,
     title: '千秋',
     type: 'performance',
     note: '劇転換/演奏/転換(ナレーション)'
   },
   {
-    number: 4,
+    number: 3,
     title: '雷音',
     type: 'performance',
     note: ''
   },
   {
-    number: 5,
+    number: 4,
     title: 'カシラ',
     type: 'transition',
     note: '転換'
   },
   {
-    number: 6,
+    number: 5,
     title: '跳兎囃子',
     type: 'performance',
     note: ''
   },
   {
-    number: 7,
-    title: '',
-    type: 'transition',
-    note: '劇転換'
-  },
-  {
-    number: 8,
+    number: 6,
     title: '越佐',
     type: 'performance',
     note: ''
   },
   {
-    number: 9,
-    title: '',
-    type: 'transition',
-    note: '劇転換'
-  },
-  {
-    number: 10,
+    number: 7,
     title: '春の息吹',
     type: 'performance',
     note: ''
   },
   {
-    number: 11,
-    title: '',
-    type: 'transition',
-    note: '劇転換'
-  },
-  {
-    number: 12,
+    number: 8,
     title: '乙彼',
     type: 'performance',
     note: ''
   },
   {
-    number: 13,
+    number: 9,
     title: '風来舞',
     type: 'performance',
     note: ''
   },
   {
-    number: 14,
+    number: 10,
     title: '投票タイム',
     type: 'voting',
     note: ''
   },
   {
-    number: 15,
-    title: '',
-    type: 'transition',
-    note: '劇転換'
-  },
-  {
-    number: 16,
+    number: 11,
     title: '雨雫',
     type: 'performance',
     note: ''
   },
   {
-    number: 17,
-    title: '',
-    type: 'transition',
-    note: '劇転換'
-  },
-  {
-    number: 18,
+    number: 12,
     title: '卒業生曲',
     type: 'performance',
     note: ''
   },
   {
-    number: 19,
+    number: 13,
     title: 'つるてん太鼓',
     type: 'performance',
     note: ''
   },
   {
-    number: 20,
-    title: '閉会挨拶',
-    type: 'greeting',
-    note: ''
-  },
-  {
-    number: 21,
-    title: '映像上映',
-    type: 'video',
-    note: ''
-  },
-  {
-    number: 22,
-    title: '新曲（転太鼓）/ 風駆狼',
+    number: 14,
+    title: '爛漫花',
     type: 'performance',
     note: ''
   },
   {
-    number: 23,
-    title: '遥か',
-    type: 'encore',
-    note: 'アンコール'
-  }
+    number: 15,
+    title: '風駆狼',
+    type: 'performance',
+    note: ''
+  },
 ];
 
 export function Program() {
@@ -201,7 +153,7 @@ export function Program() {
             </div>
           </div>
         </div>
-        
+
         <div className="space-y-3">
           {programs.map((program) => {
             // 転換のみで演目がない場合はスキップ
@@ -222,13 +174,12 @@ export function Program() {
               >
                 <div className="flex-shrink-0 w-12 md:w-16">
                   <div
-                    className={`text-xl md:text-2xl font-bold ${
-                      program.type === 'transition'
-                        ? 'text-gray-400'
-                        : program.type === 'encore'
+                    className={`text-xl md:text-2xl font-bold ${program.type === 'transition'
+                      ? 'text-gray-400'
+                      : program.type === 'encore'
                         ? 'text-cyan-700'
                         : 'text-cyan-700'
-                    }`}
+                      }`}
                   >
                     {program.number}
                   </div>
@@ -242,19 +193,18 @@ export function Program() {
                       </h3>
                     )}
                     <span
-                      className={`text-xs px-2 py-1 rounded ${
-                        program.type === 'performance'
-                          ? 'bg-cyan-600 text-white'
-                          : program.type === 'greeting'
+                      className={`text-xs px-2 py-1 rounded ${program.type === 'performance'
+                        ? 'bg-cyan-600 text-white'
+                        : program.type === 'greeting'
                           ? 'bg-blue-500 text-white'
                           : program.type === 'voting'
-                          ? 'bg-amber-500 text-white'
-                          : program.type === 'video'
-                          ? 'bg-purple-500 text-white'
-                          : program.type === 'encore'
-                          ? 'bg-cyan-700 text-white'
-                          : 'bg-gray-400 text-white'
-                      }`}
+                            ? 'bg-amber-500 text-white'
+                            : program.type === 'video'
+                              ? 'bg-purple-500 text-white'
+                              : program.type === 'encore'
+                                ? 'bg-cyan-700 text-white'
+                                : 'bg-gray-400 text-white'
+                        }`}
                     >
                       {getTypeLabel(program.type)}
                     </span>
@@ -283,7 +233,7 @@ export function Program() {
             <ul className="text-sm text-gray-700 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-cyan-600 mt-1">•</span>
-                <span>全23演目を予定しております</span>
+                <span>全14演目を予定しております</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-cyan-600 mt-1">•</span>
@@ -314,7 +264,7 @@ export function Program() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-gray-500 mt-1">•</span>
-                <span>演奏中の撮影・録音はご遠慮ください</span>
+                <span>演奏中の撮影・録音は可能ですが、マナーを守ってお願いいたします</span>
               </li>
             </ul>
           </div>
