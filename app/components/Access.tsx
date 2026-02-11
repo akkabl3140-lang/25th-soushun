@@ -8,7 +8,7 @@ export function Access() {
             アクセス
           </h2>
         </div>
-        
+
         <div className="grid md:grid-cols-2 gap-12">
           <div>
             <div className="h-[400px] border-8 border-cyan-700 rounded-sm overflow-hidden mb-6">
@@ -23,17 +23,17 @@ export function Access() {
               ></iframe>
             </div>
           </div>
-          
+
           <div className="space-y-6">
             <div>
               <h3 className="text-white text-2xl mb-4">アオーレ長岡</h3>
               <p className="text-white mb-4">
-                市民ホー���A<br />
+                市民交流ホールA<br />
                 〒940-0062<br />
                 新潟県長岡市大手通1丁目4番地10
               </p>
             </div>
-            
+
             <div>
               <h4 className="text-cyan-300 tracking-wide mb-3">電車でお越しの方</h4>
               <ul className="space-y-2 text-white">
@@ -42,7 +42,7 @@ export function Access() {
                 </li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="text-cyan-300 tracking-wide mb-3">お車でお越しの方</h4>
               <p className="text-white mb-3">
@@ -53,7 +53,7 @@ export function Access() {
                 ※駐車台数に限りがございますので、できる限り公共交通機関をご利用ください。
               </p>
             </div>
-            
+
             <div className="bg-cyan-50 border-l-4 border-cyan-600 p-4 rounded-sm">
               <h4 className="text-cyan-700 mb-2">座席券配布・開場時間</h4>
               <p className="text-gray-700">
