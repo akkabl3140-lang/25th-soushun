@@ -9,7 +9,7 @@ const programs = [
     number: 2,
     title: '千秋',
     type: 'performance',
-    note: '劇転換/演奏/転換(ナレーション)'
+    note: ''
   },
   {
     number: 3,
