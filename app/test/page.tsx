@@ -50,7 +50,7 @@ export default function SeatReservation() {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [isVerified, setIsVerified] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
+  const [loading, setLoading] = useState(false);
   // -----------------------------
   // 座席生成（4-9-4）
   // -----------------------------
@@ -105,18 +105,25 @@ export default function SeatReservation() {
   // 予約ID確認
   // -----------------------------
   const checkReservation = async () => {
-    const res = await fetch(
-      `${API_URL}?reservation_id=${reservationId}`
-    );
-    const data = await res.json();
+    if (!reservationId) return;
 
-    if (!data.success || data.status !== "unused") {
-      setAlertMessage("予約IDが無効です");
-      return;
+    setLoading(true); // ←ここでローディング開始
+    try {
+      const res = await fetch(`${API_URL}?reservation_id=${reservationId}`);
+      const data = await res.json();
+
+      if (!data.success || data.status !== "unused") {
+        setAlertMessage("予約IDが無効です");
+        return;
+      }
+
+      setAllowedSeats(Number(data.people));
+      setIsVerified(true);
+    } catch (err) {
+      setAlertMessage("通信に失敗しました");
+    } finally {
+      setLoading(false); // ←ここでローディング終了
     }
-
-    setAllowedSeats(Number(data.people));
-    setIsVerified(true);
   };
 
   // -----------------------------
@@ -150,7 +157,7 @@ export default function SeatReservation() {
     const formData = new URLSearchParams();
     formData.append("reservation_id", reservationId);
     formData.append("seats", selectedSeats.join(","));
-
+    setLoading(true); 
     const res = await fetch(API_URL, {
       method: "POST",
       body: formData,
@@ -169,6 +176,7 @@ export default function SeatReservation() {
           : seat
       )
     );
+    setLoading(false); 
     setSelectedSeats([]);
     setAlertMessage("予約完了！");
   };
@@ -198,7 +206,13 @@ export default function SeatReservation() {
           <button onClick={checkReservation}>確認</button>
         </>
       )}
-
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white bg-opacity-90 p-6 rounded-2xl shadow-lg text-center animate-fadeIn">
+            <p className="text-gray-700 font-semibold">少々お待ちください… ⏳</p>
+          </div>
+        </div>
+      )}
       {isVerified && (
         <>
           <p>予約人数：{allowedSeats}名</p>
