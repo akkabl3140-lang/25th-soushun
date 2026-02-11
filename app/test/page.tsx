@@ -157,7 +157,7 @@ export default function SeatReservation() {
     const formData = new URLSearchParams();
     formData.append("reservation_id", reservationId);
     formData.append("seats", selectedSeats.join(","));
-    setLoading(true); 
+    setLoading(true);
     const res = await fetch(API_URL, {
       method: "POST",
       body: formData,
@@ -176,22 +176,21 @@ export default function SeatReservation() {
           : seat
       )
     );
-    setLoading(false); 
+    setLoading(false);
     setSelectedSeats([]);
     setAlertMessage("予約完了！");
   };
   const renderSeat = (seat: Seat) => (
     <div
       key={seat.id}
-      className={`seat ${seat.status} ${
-        selectedSeats.includes(seat.id) ? "selected" : ""
-      }`}
+      className={`seat ${seat.status} ${selectedSeats.includes(seat.id) ? "selected" : ""
+        }`}
       onClick={() => toggleSeat(seat.id)}
     >
       {seat.id}
     </div>
   );
-  
+
   return (
     <div>
       <h2>座席予約</h2>
@@ -216,7 +215,7 @@ export default function SeatReservation() {
       {isVerified && (
         <>
           <p>予約人数：{allowedSeats}名</p>
-          
+
           <div className="stage">STAGE</div>
 
           <div className="seat-map">
@@ -226,13 +225,20 @@ export default function SeatReservation() {
               const leftSeats = rowSeats.slice(0, 4);    // 左ブロック
               const centerSeats = rowSeats.slice(4, 13); // 中央ブロック
               const rightSeats = rowSeats.slice(13, 17); // 右ブロック
+              const isFloorRow = ["X", "Y", "Z"].includes(rowLabel);
 
               return (
                 <div
                   key={rowLabel}
-                  className="seat-row"
-                  
+                  className={`seat-row ${isFloorRow ? "floor-row" : "riser-row"}`}
                 >
+                  {/* ★ここが追加：左の補足 */}
+                  <div className="row-info">
+                    <div className="row-label">{rowLabel}列</div>
+                    <div className="row-note">
+                      {isFloorRow ? "スタッキングチェア" : "段差つき席"}
+                    </div>
+                  </div>
                   <div className="seat-block">{leftSeats.map(renderSeat)}</div>
                   <div className="aisle"></div>
                   <div className="seat-block">{centerSeats.map(renderSeat)}</div>

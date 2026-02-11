@@ -67,7 +67,8 @@ button:disabled {
 }
 
 .aisle {
-  width: 20px; /* 通路幅 */
+  width: 20px;
+  /* 通路幅 */
 }
 
 
@@ -118,7 +119,7 @@ p {
   font-weight: bold;
   border-radius: 4px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -130,14 +131,64 @@ p {
   transform: translateZ(var(--row-depth));
 }
 
+.seat-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* 左の補足ブロック */
+.row-info {
+  width: 150px;
+  /* 好みで調整 */
+  text-align: right;
+  margin-right: 6px;
+}
+
+.row-label {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.row-note {
+  font-size: 12px;
+  opacity: 0.75;
+  line-height: 1.2;
+}
+
+/* さらに差を付けたいなら色を変える（任意） */
+.floor-row .row-note {
+  opacity: 0.85;
+}
+
+.riser-row .row-note {
+  opacity: 0.85;
+}
+
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(-10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeOut {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-10px); }
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 .animate-fadeIn {
