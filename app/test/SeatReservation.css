@@ -2,13 +2,15 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5f5f5;
-  display: flex;
+  display: block;
   justify-content: center;
-  padding: 40px;
+  padding: 20px;
 }
 
 #root {
-  width: 900px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* 見出し */
@@ -109,9 +111,29 @@ p {
   font-size: 18px;
 }
 
+.theater {
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .theater {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 12px;
+  }
+}
+
+:root {
+  --rowInfoW: 60px;
+  --rowInfoGap: 5px;
+}
+
 /* ステージ */
 .stage {
-  width: 100%;
+  width: calc(100% - (var(--rowInfoW)));
   height: 80px;
   background-color: #d9c49a;
   text-align: center;
@@ -119,9 +141,9 @@ p {
   font-weight: bold;
   border-radius: 4px;
   margin-bottom: 20px;
+  margin-left: calc(var(--rowInfoW) + var(--rowInfoGap));
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-
 
 .seat-map {
   perspective: 800px;
@@ -138,12 +160,54 @@ p {
   gap: 10px;
 }
 
+@media (max-width: 480px) {
+  .stage {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+  }
+
+  .seat {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .seat-block {
+    gap: 4px;
+  }
+
+  .seat-row {
+    gap: 4px;
+  }
+
+  .seat-area {
+    width: max-content;
+    margin: 0 auto;
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
+
+  .seat-map {
+    width: max-content;
+  }
+
+  .aisle {
+    width: 10px;
+  }
+}
+
 /* 左の補足ブロック */
 .row-info {
-  width: 150px;
-  /* 好みで調整 */
+  width: var(--rowInfoW);
   text-align: right;
-  margin-right: 6px;
+  margin-right: var(--rowInfoGap);
+}
+
+@media (max-width: 480px) {
+  .row-info {
+    font-size: 12px;
+  }
 }
 
 .row-label {

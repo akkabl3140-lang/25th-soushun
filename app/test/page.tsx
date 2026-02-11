@@ -216,40 +216,43 @@ export default function SeatReservation() {
         <>
           <p>予約人数：{allowedSeats}名</p>
 
-          <div className="stage">STAGE</div>
+          <div className="theater">
+            <div className="seat-area">
 
-          <div className="seat-map">
-            {Array.from(new Set(seats.map((s) => s.rowLabel))).map((rowLabel, rowIndex) => {
-              const rowSeats = seats.filter((s) => s.rowLabel === rowLabel);
+              <div className="stage">STAGE</div>
 
-              const leftSeats = rowSeats.slice(0, 4);    // 左ブロック
-              const centerSeats = rowSeats.slice(4, 13); // 中央ブロック
-              const rightSeats = rowSeats.slice(13, 17); // 右ブロック
-              const isFloorRow = ["X", "Y", "Z"].includes(rowLabel);
+              <div className="seat-map">
+                {Array.from(new Set(seats.map((s) => s.rowLabel))).map((rowLabel, rowIndex) => {
+                  const rowSeats = seats.filter((s) => s.rowLabel === rowLabel);
 
-              return (
-                <div
-                  key={rowLabel}
-                  className={`seat-row ${isFloorRow ? "floor-row" : "riser-row"}`}
-                >
-                  {/* ★ここが追加：左の補足 */}
-                  <div className="row-info">
-                    <div className="row-label">{rowLabel}列</div>
-                    <div className="row-note">
-                      {isFloorRow ? "スタッキングチェア" : "段差つき席"}
+                  const leftSeats = rowSeats.slice(0, 4);    // 左ブロック
+                  const centerSeats = rowSeats.slice(4, 13); // 中央ブロック
+                  const rightSeats = rowSeats.slice(13, 17); // 右ブロック
+                  const isFloorRow = ["X", "Y", "Z"].includes(rowLabel);
+
+                  return (
+                    <div
+                      key={rowLabel}
+                      className={`seat-row ${isFloorRow ? "floor-row" : "riser-row"}`}
+                    >
+                      {/* ★ここが追加：左の補足 */}
+                      <div className="row-info">
+                        <div className="row-label">{rowLabel}列</div>
+                        <div className="row-note">
+                          {isFloorRow ? "フロア席" : "段差席"}
+                        </div>
+                      </div>
+                      <div className="seat-block">{leftSeats.map(renderSeat)}</div>
+                      <div className="aisle"></div>
+                      <div className="seat-block">{centerSeats.map(renderSeat)}</div>
+                      <div className="aisle"></div>
+                      <div className="seat-block">{rightSeats.map(renderSeat)}</div>
                     </div>
-                  </div>
-                  <div className="seat-block">{leftSeats.map(renderSeat)}</div>
-                  <div className="aisle"></div>
-                  <div className="seat-block">{centerSeats.map(renderSeat)}</div>
-                  <div className="aisle"></div>
-                  <div className="seat-block">{rightSeats.map(renderSeat)}</div>
-                </div>
-              );
-            })}
+                  );
+                })}
 
-
-
+              </div>
+            </div>
           </div>
 
           <button onClick={confirmReservation}>
