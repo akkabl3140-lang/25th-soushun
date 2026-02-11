@@ -136,7 +136,7 @@ export function Program() {
         <div className="text-center mb-16">
           <p className="text-cyan-700 tracking-[0.2em] text-sm mb-2">PROGRAM</p>
           <h2 className="text-white text-4xl md:text-5xl mb-4">
-            演目
+            公演時間
           </h2>
           <p className="text-white/60 mb-6">
             約1時間30分の演奏会をお楽しみください
@@ -153,6 +153,8 @@ export function Program() {
             </div>
           </div>
         </div>
+        
+        {/* <div className="space-y-3">
 
         <div className="space-y-3">
           {programs.map((program) => {
@@ -184,8 +186,8 @@ export function Program() {
                     {program.number}
                   </div>
                 </div>
-
-                <div className="flex-grow">
+ */}
+                {/* <div className="flex-grow">
                   <div className="flex items-start gap-3 mb-1">
                     {program.title && (
                       <h3 className="text-lg md:text-xl flex-grow">
@@ -216,10 +218,10 @@ export function Program() {
               </div>
             );
           })}
-        </div>
+        </div> */}
 
         <div className="mt-10 grid md:grid-cols-2 gap-4">
-          <div className="p-5 bg-cyan-50 rounded-sm border-l-4 border-cyan-600">
+          {/* <div className="p-5 bg-cyan-50 rounded-sm border-l-4 border-cyan-600">
             <h4 className="text-cyan-700 mb-3 flex items-center gap-2">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -244,7 +246,7 @@ export function Program() {
                 <span>投票タイムでは観客投票を実施します</span>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           <div className="p-5 bg-gray-50 rounded-sm border-l-4 border-gray-400">
             <h4 className="text-gray-700 mb-3 flex items-center gap-2">
