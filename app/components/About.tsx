@@ -17,29 +17,29 @@ export function About() {
                   韻 ~揺るがないもの~
                 </h3>
               </div>
-              
+
               <p className="text-white leading-relaxed">
                 今年の演奏会のテーマ「韻 ― 揺るがないもの ―」には、私たちの団体がこれまで歩んできた軌跡と、その先に広がっていく未来への想いを込めました。
               </p>
-              
+
               <p className="text-white leading-relaxed">
                 「韻」という文字には、&quot;響き&quot;や&quot;余韻&quot;、すなわち後に残るものという意味があります。
                 これまで先輩方が築き上げてきた太鼓の音や精神は、まさに私たちに受け継がれた&quot;韻&quot;であり、
                 その重みと温度を感じていただきたい。
                 そしてその先に広がっていく音は、今を生きる私たち自身が創り出していく――
                 そんな決意をこの一文字に託しました。
-            </p>
-            
-            <p className="text-white leading-relaxed">
+              </p>
+
+              <p className="text-white leading-relaxed">
                 また、「揺るがないもの」には、変化の中にあっても決して失ってはならない&quot;想い&quot;という意味を込めています。
                 私たちは、演奏を&quot;披露する&quot;という原点に立ち返り、
                 技術の向上、太鼓に向き合う心、仲間と響き合う姿勢、受け継いだ思いを大切にしたいと考えています。
-            </p>
-              
+              </p>
+
               <p className="text-white leading-relaxed">
                 演奏会は、これまでの集大成であると同時に、次の一歩を踏み出す場所でもあります。揺るがない想いを胸に、私たちらしい「韻」を打ち鳴らします。
               </p>
-              
+
               <div className="grid grid-cols-2 gap-6 pt-6">
                 <div className="border-l-4 border-cyan-600 pl-4">
                   <p className="text-sm text-cyan-300 mb-1">開催日時</p>
@@ -49,7 +49,7 @@ export function About() {
                 <div className="border-l-4 border-cyan-600 pl-4">
                   <p className="text-sm text-cyan-300 mb-1">会場</p>
                   <p className="text-white font-bold">アオーレ長岡</p>
-                  <p className="text-white text-sm">市民ホールA</p>
+                  <p className="text-white text-sm">市民交流ホールA</p>
                 </div>
               </div>
             </div>
