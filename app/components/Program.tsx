@@ -132,7 +132,7 @@ export function Program() {
 
   return (
     <section id="program" className="py-20 px-4 md:px-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto flex flex-col items-center">
         <div className="text-center mb-16">
           <p className="text-cyan-700 tracking-[0.2em] text-sm mb-2">PROGRAM</p>
           <h2 className="text-white text-4xl md:text-5xl mb-4">
@@ -220,7 +220,7 @@ export function Program() {
           })}
         </div> */}
 
-        <div className="mt-10 grid md:grid-cols-2 gap-4">
+        <div className="mt-10 grid w-fit gap-4">
           {/* <div className="p-5 bg-cyan-50 rounded-sm border-l-4 border-cyan-600">
             <h4 className="text-cyan-700 mb-3 flex items-center gap-2">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
