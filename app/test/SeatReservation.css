@@ -2,13 +2,15 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5f5f5;
-  display: flex;
+  display: block;
   justify-content: center;
-  padding: 40px;
+  padding: 20px;
 }
 
 #root {
-  width: 900px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* 見出し */
@@ -17,9 +19,21 @@ h2 {
   margin-bottom: 20px;
 }
 
+.id-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* ★確実に中央 */
+  gap: 12px;
+  margin: 20px 0;
+}
+
+
 /* 予約ID入力フォーム */
 input {
+  display: block;
   padding: 8px 12px;
+  margin: 20px auto;
   font-size: 16px;
   margin-right: 8px;
   border-radius: 4px;
@@ -27,7 +41,9 @@ input {
 }
 
 button {
+  display: block;
   padding: 8px 16px;
+  margin: 20px auto;
   font-size: 16px;
   background-color: #0078d4;
   color: #fff;
@@ -44,6 +60,15 @@ button:hover {
 button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
+}
+
+.id-form input {
+  width: 260px;
+  margin: 0;
+}
+
+.id-form button {
+  margin: 0;
 }
 
 /* 座席表全体 */
@@ -67,7 +92,8 @@ button:disabled {
 }
 
 .aisle {
-  width: 20px; /* 通路幅 */
+  width: 20px;
+  /* 通路幅 */
 }
 
 
@@ -108,9 +134,29 @@ p {
   font-size: 18px;
 }
 
+.theater {
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .theater {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 12px;
+  }
+}
+
+:root {
+  --rowInfoW: 60px;
+  --rowInfoGap: 5px;
+}
+
 /* ステージ */
 .stage {
-  width: 100%;
+  width: calc(100% - (var(--rowInfoW)));
   height: 80px;
   background-color: #d9c49a;
   text-align: center;
@@ -118,9 +164,9 @@ p {
   font-weight: bold;
   border-radius: 4px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  margin-left: calc(var(--rowInfoW) + var(--rowInfoGap));
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-
 
 .seat-map {
   perspective: 800px;
@@ -130,14 +176,147 @@ p {
   transform: translateZ(var(--row-depth));
 }
 
+.seat-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.seat.mine {
+  outline: 3px solid #ff9800;
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.25);
+}
+
+@media (max-width: 480px) {
+  .stage {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+  }
+
+  .seat {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .seat-block {
+    gap: 4px;
+  }
+
+  .seat-row {
+    gap: 4px;
+  }
+
+  .seat-area {
+    width: max-content;
+    margin: 0 auto;
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
+
+  .seat-map {
+    width: max-content;
+  }
+
+  .aisle {
+    width: 10px;
+  }
+}
+
+/* 左の補足ブロック */
+.row-info {
+  width: var(--rowInfoW);
+  text-align: right;
+  margin-right: var(--rowInfoGap);
+}
+
+@media (max-width: 480px) {
+  .row-info {
+    font-size: 12px;
+  }
+}
+
+.row-label {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.row-note {
+  font-size: 12px;
+  opacity: 0.75;
+  line-height: 1.2;
+}
+
+.confirm-btn {
+  display: block;
+  margin: 24px auto;
+}
+
+/* スマホでは画面下に固定して常に見えるように */
+@media (max-width: 480px) {
+  .confirm-btn {
+    position: fixed;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    z-index: 100;
+    margin: 0;
+    width: min(92vw, 320px);
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  /* 固定ボタンに被らないよう余白を確保 */
+  #root {
+    padding-bottom: 80px;
+  }
+}
+
+.cancel-btn {
+  display: block;
+  margin: 12px auto;
+  background: #d9534f;
+}
+
+.cancel-btn:hover {
+  background: #c9302c;
+}
+
+
+/* さらに差を付けたいなら色を変える（任意） */
+.floor-row .row-note {
+  opacity: 0.85;
+}
+
+.riser-row .row-note {
+  opacity: 0.85;
+}
+
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(-10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeOut {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-10px); }
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 .animate-fadeIn {

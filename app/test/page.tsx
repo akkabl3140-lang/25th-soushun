@@ -51,9 +51,13 @@ export default function SeatReservation() {
   const [isVerified, setIsVerified] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [mySeats, setMySeats] = useState<string[]>([]);
+  const [mode, setMode] = useState<"select" | "view">("select");
+
   // -----------------------------
   // 座席生成（4-9-4）
   // -----------------------------
+  const [reservedLoaded, setReservedLoaded] = useState(false);
   useEffect(() => {
     const layout = [4, 9, 4];
     const rowLabels = "XYZABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").slice(0, 13);
@@ -80,7 +84,7 @@ export default function SeatReservation() {
   // 予約済み座席の読み込み
   // -----------------------------
   useEffect(() => {
-    if (seats.length === 0) return;
+    if (seats.length === 0 || reservedLoaded) return;
 
     const loadReservedSeats = async () => {
       const res = await fetch(API_URL + "?mode=reservedSeats");
@@ -95,10 +99,11 @@ export default function SeatReservation() {
             : seat
         )
       );
+      setReservedLoaded(true);
     };
 
     loadReservedSeats();
-  }, [seats]);
+  }, [seats.length, reservedLoaded]);
 
 
   // -----------------------------
@@ -112,17 +117,46 @@ export default function SeatReservation() {
       const res = await fetch(`${API_URL}?reservation_id=${reservationId}`);
       const data = await res.json();
 
-      if (!data.success || data.status !== "unused") {
+      if (!data.success) {
         setAlertMessage("予約IDが無効です");
         return;
       }
 
       setAllowedSeats(Number(data.people));
       setIsVerified(true);
+      const status = String(data.status ?? "").trim().toLowerCase();
+
+      if (status === "unused") {
+        setMode("select");
+        setMySeats([]);
+        return;
+      }
+
+      if (status === "reserved") {
+        setMode("view");
+
+        const myRes = await fetch(
+          `${API_URL}?mode=mySeats&reservation_id=${reservationId}`
+        );
+        const myData = await myRes.json();
+
+        if (myData.success) {
+          const seatsArray =
+            typeof myData.seats === "string"
+              ? myData.seats.split(",").map((s: string) => s.trim())
+              : myData.seats ?? [];
+          setMySeats(seatsArray);
+          setAlertMessage("予約済みの座席を表示しました");
+        } else {
+          setAlertMessage("予約席の取得に失敗しました");
+        }
+        return;
+      }
+      setAlertMessage("予約IDが無効です")
     } catch (err) {
       setAlertMessage("通信に失敗しました");
     } finally {
-      setLoading(false); // ←ここでローディング終了
+      setLoading(false);
     }
   };
 
@@ -131,6 +165,7 @@ export default function SeatReservation() {
   // -----------------------------
   const toggleSeat = (seatId: string) => {
     if (!isVerified) return;
+    if (mode === "view") return;
 
     const seat = seats.find((s) => s.id === seatId);
     if (!seat || seat.status === "reserved") return;
@@ -154,57 +189,113 @@ export default function SeatReservation() {
   // 予約確定
   // -----------------------------
   const confirmReservation = async () => {
+    if (selectedSeats.length === 0) {
+      setAlertMessage("座席を選択してください");
+      return;
+    }
+    if (selectedSeats.length !== allowedSeats) {
+      setAlertMessage(`${allowedSeats}席選択してください`);
+      return;
+    }
     const formData = new URLSearchParams();
     formData.append("reservation_id", reservationId);
     formData.append("seats", selectedSeats.join(","));
-    setLoading(true); 
-    const res = await fetch(API_URL, {
-      method: "POST",
-      body: formData,
-    });
+    setLoading(true);
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
 
-    const data = await res.json();
+      if (!data.success) {
+        setAlertMessage(data.message ?? "予約に失敗しました");
+        return;
+      }
+      setSeats(prev =>
+        prev.map(seat =>
+          selectedSeats.includes(seat.id)
+            ? { ...seat, status: "reserved" }
+            : seat
+        )
+      );
+      setMySeats(selectedSeats);
+      setMode("view");
 
-    if (!data.success) {
-      alert(data.message);
-      return;
+      setSelectedSeats([]);
+      setAlertMessage("予約完了！");
+    } catch {
+      setAlertMessage("通信に失敗しました");
+    } finally {
+      setLoading(false);
     }
-    setSeats(prev =>
-      prev.map(seat =>
-        selectedSeats.includes(seat.id)
-          ? { ...seat, status: "reserved" }
-          : seat
-      )
-    );
-    setLoading(false); 
-    setSelectedSeats([]);
-    setAlertMessage("予約完了！");
   };
-  const renderSeat = (seat: Seat) => (
-    <div
-      key={seat.id}
-      className={`seat ${seat.status} ${
-        selectedSeats.includes(seat.id) ? "selected" : ""
-      }`}
-      onClick={() => toggleSeat(seat.id)}
-    >
-      {seat.id}
-    </div>
-  );
-  
+  const renderSeat = (seat: Seat) => {
+    const isMine = mySeats.includes(seat.id);
+
+    return (
+      <div
+        key={seat.id}
+        className={`seat ${seat.status} ${selectedSeats.includes(seat.id) ? "selected" : ""
+          } ${isMine ? "mine" : ""}`}
+        onClick={() => toggleSeat(seat.id)}
+      >
+        {seat.id}
+      </div>
+    );
+  };
+
+  const cancelReservation = async () => {
+    // まず警告（標準confirmでOK）
+    const ok = window.confirm("予約を取り消しますか？この操作は元に戻せません。");
+    if (!ok) return;
+
+    setLoading(true);
+    try {
+      const formData = new URLSearchParams();
+      formData.append("mode", "cancel");
+      formData.append("reservation_id", reservationId);
+
+      const res = await fetch(API_URL, { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!data.success) {
+        setAlertMessage(data.message ?? "取消に失敗しました");
+        return;
+      }
+
+      // 取消した席を available に戻す（mySeats を使う）
+      setSeats(prev =>
+        prev.map(seat =>
+          mySeats.includes(seat.id) ? { ...seat, status: "available" } : seat
+        )
+      );
+
+      setMySeats([]);
+      setSelectedSeats([]);
+      setMode("select");
+      setAlertMessage("予約を取り消しました");
+    } catch {
+      setAlertMessage("通信に失敗しました");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <div>
       <h2>座席予約</h2>
 
       {!isVerified && (
-        <>
+        <div className="id-form">
           <input
             value={reservationId}
             onChange={(e) => setReservationId(e.target.value)}
             placeholder="予約ID"
           />
           <button onClick={checkReservation}>確認</button>
-        </>
+        </div>
       )}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -216,39 +307,57 @@ export default function SeatReservation() {
       {isVerified && (
         <>
           <p>予約人数：{allowedSeats}名</p>
-          
-          <div className="stage">STAGE</div>
 
-          <div className="seat-map">
-            {Array.from(new Set(seats.map((s) => s.rowLabel))).map((rowLabel, rowIndex) => {
-              const rowSeats = seats.filter((s) => s.rowLabel === rowLabel);
+          <div className="theater">
+            <div className="seat-area">
 
-              const leftSeats = rowSeats.slice(0, 4);    // 左ブロック
-              const centerSeats = rowSeats.slice(4, 13); // 中央ブロック
-              const rightSeats = rowSeats.slice(13, 17); // 右ブロック
+              <div className="stage">STAGE</div>
 
-              return (
-                <div
-                  key={rowLabel}
-                  className="seat-row"
-                  
-                >
-                  <div className="seat-block">{leftSeats.map(renderSeat)}</div>
-                  <div className="aisle"></div>
-                  <div className="seat-block">{centerSeats.map(renderSeat)}</div>
-                  <div className="aisle"></div>
-                  <div className="seat-block">{rightSeats.map(renderSeat)}</div>
-                </div>
-              );
-            })}
+              <div className="seat-map">
+                {Array.from(new Set(seats.map((s) => s.rowLabel))).map((rowLabel, rowIndex) => {
+                  const rowSeats = seats.filter((s) => s.rowLabel === rowLabel);
 
+                  const leftSeats = rowSeats.slice(0, 4);    // 左ブロック
+                  const centerSeats = rowSeats.slice(4, 13); // 中央ブロック
+                  const rightSeats = rowSeats.slice(13, 17); // 右ブロック
+                  const isFloorRow = ["X", "Y", "Z"].includes(rowLabel);
 
+                  return (
+                    <div
+                      key={rowLabel}
+                      className={`seat-row ${isFloorRow ? "floor-row" : "riser-row"}`}
+                    >
+                      {/* ★ここが追加：左の補足 */}
+                      <div className="row-info">
+                        <div className="row-label">{rowLabel}列</div>
+                        <div className="row-note">
+                          {isFloorRow ? "フロア席" : "段差席"}
+                        </div>
+                      </div>
+                      <div className="seat-block">{leftSeats.map(renderSeat)}</div>
+                      <div className="aisle"></div>
+                      <div className="seat-block">{centerSeats.map(renderSeat)}</div>
+                      <div className="aisle"></div>
+                      <div className="seat-block">{rightSeats.map(renderSeat)}</div>
+                    </div>
+                  );
+                })}
 
+              </div>
+            </div>
           </div>
 
-          <button onClick={confirmReservation}>
-            予約確定
-          </button>
+          {isVerified && mode === "select" && (
+            <button className="confirm-btn" onClick={confirmReservation}
+              disabled={loading || selectedSeats.length === 0 || selectedSeats.length !== allowedSeats}
+            >予約確定</button>
+          )}
+          {isVerified && mode === "view" && (
+            <button className="cancel-btn" onClick={cancelReservation} disabled={loading}>
+              予約取消
+            </button>
+          )}
+
         </>
       )}
       {alertMessage && (
