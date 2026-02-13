@@ -6,8 +6,8 @@ import { kaisei, mincho } from '@/app/fonts';
 
 export function Hero() {
   return (
-        <div id="home" className="relative h-screen overflow-hidden">
-            {/* <div className="absolute inset-0 z-0">
+    <div id="home" className="relative h-screen overflow-hidden">
+      {/* <div className="absolute inset-0 z-0">
         <Image
           src={hero}
           alt=""
@@ -26,7 +26,7 @@ export function Hero() {
           priority
         />
       </div>
-  {/* <div className="absolute top-0 left-0 right-0 z-10 overflow-hidden">
+      {/* <div className="absolute top-0 left-0 right-0 z-10 overflow-hidden">
   <Image
     src={all}
     alt="演奏者"
@@ -34,7 +34,7 @@ export function Hero() {
     // priority
   />
 </div> */}
-{/* <div className="absolute top-0 left-0 right-0 z-10 overflow-hidden">
+      {/* <div className="absolute top-0 left-0 right-0 z-10 overflow-hidden">
   <Image
     src={azu}
     alt="演奏者"
@@ -82,18 +82,21 @@ export function Hero() {
             </div>
             <div className="space-y-2">
               <p className={`${kaisei.className} text-3xl md:text-3xl tracking-widest text-cyan-300`}>
-                韻 ~揺るがないもの~
+                <ruby>
+                  韻
+                  <rt className="text-sm">いん</rt>
+                </ruby> ~揺るがないもの~
               </p>
             </div>
           </div>
-          
+
           <div className={`${mincho.className} shadow-[0_0_30px_20px_rgba(0,0,0,0.3)] mt-40 space-y-4 text-xl md:text-2xl lg:text-3xl bg-black/30`}>
             <p className="tracking-wide font-bold">2026年3月8日（日）13:00開演</p>
-            <p className="tracking-wide font-bold">アオーレ長岡 市民ホールA</p>
+            <p className="tracking-wide font-bold">アオーレ長岡 市民交流ホールA</p>
           </div>
         </div>
       </div>
-      
+
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <svg
           className="w-6 h-6 text-white"
