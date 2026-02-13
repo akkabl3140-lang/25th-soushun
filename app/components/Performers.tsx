@@ -50,11 +50,11 @@ export function Performers() {
 
                   <div>
                     <h4 className="text-cyan-700 mb-3 text-sm tracking-wider">出演者</h4>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-3 justify-center">
                       {performer.members.map((member, idx) => (
                         <div
                           key={idx}
-                          className="px-4 py-2 bg-cyan-50 rounded-sm hover:bg-cyan-100 transition-colors duration-300 border border-cyan-200"
+                          className="px-4 py-2 bg-cyan-50 rounded-sm duration-300 border border-cyan-200"
                         >
                           <p className="text-gray-800 tracking-wide">{member}</p>
                         </div>

@@ -10,7 +10,7 @@ type Seat = {
   status: "available" | "reserved";
 };
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyqHS-8v6xd4pn2nXFsCHoytJ5yWpvtRT7FDoAW_Xxvf483MjF9J_6jIcX6wToU33Lwkg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx7csS7VFL8Uw-BGvre0dufiqF9VkEc6rlgTtCJlZHOdgn1kK0Mh5BE2YWYgCgs8-auqg/exec";
 type CuteAlertProps = {
   message: string;
   onClose: () => void;
