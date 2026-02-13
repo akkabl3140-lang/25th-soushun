@@ -261,11 +261,6 @@ export function Program() {
             </h4>
             <ul className="text-sm text-gray-600 space-y-2">
               <li className="flex items-start gap-2">
-                <span className="text-gray-500 mt-1">•</span>
-                <span>プログラムは予告なく変更になる場合がございます</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-gray-500 mt-1">•</span>
                 <span>演奏中の撮影・録音は可能ですが、マナーを守ってお願いいたします</span>
               </li>
             </ul>
