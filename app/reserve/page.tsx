@@ -60,7 +60,7 @@ export default function SeatReservation() {
   const [reservedLoaded, setReservedLoaded] = useState(false);
   useEffect(() => {
     const layout = [4, 9, 4];
-    const rowLabels = "XYZABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").slice(0, 13);
+    const rowLabels = "XYZABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").slice(0, 12);
     const generatedSeats: Seat[] = [];
 
     rowLabels.forEach((rowLabel) => {
