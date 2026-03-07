@@ -160,76 +160,76 @@ export default function SeatReservation() {
     }
   };
 
-  // // -----------------------------
-  // // 座席クリック
-  // // -----------------------------
-  // const toggleSeat = (seatId: string) => {
-  //   if (!isVerified) return;
-  //   if (mode === "view") return;
+  // -----------------------------
+  // 座席クリック
+  // -----------------------------
+  const toggleSeat = (seatId: string) => {
+    if (!isVerified) return;
+    if (mode === "view") return;
 
-  //   const seat = seats.find((s) => s.id === seatId);
-  //   if (!seat || seat.status === "reserved") return;
+    const seat = seats.find((s) => s.id === seatId);
+    if (!seat || seat.status === "reserved") return;
 
-  //   if (
-  //     !selectedSeats.includes(seatId) &&
-  //     selectedSeats.length >= allowedSeats
-  //   ) {
-  //     setAlertMessage(`選択できるのは${allowedSeats}席まで`);
-  //     return;
-  //   }
+    if (
+      !selectedSeats.includes(seatId) &&
+      selectedSeats.length >= allowedSeats
+    ) {
+      setAlertMessage(`選択できるのは${allowedSeats}席まで`);
+      return;
+    }
 
-  //   setSelectedSeats((prev) =>
-  //     prev.includes(seatId)
-  //       ? prev.filter((id) => id !== seatId)
-  //       : [...prev, seatId]
-  //   );
-  // };
+    setSelectedSeats((prev) =>
+      prev.includes(seatId)
+        ? prev.filter((id) => id !== seatId)
+        : [...prev, seatId]
+    );
+  };
 
-  // // -----------------------------
-  // // 予約確定
-  // // -----------------------------
-  // const confirmReservation = async () => {
-  //   if (selectedSeats.length === 0) {
-  //     setAlertMessage("座席を選択してください");
-  //     return;
-  //   }
-  //   if (selectedSeats.length !== allowedSeats) {
-  //     setAlertMessage(`${allowedSeats}席選択してください`);
-  //     return;
-  //   }
-  //   const formData = new URLSearchParams();
-  //   formData.append("reservation_id", reservationId);
-  //   formData.append("seats", selectedSeats.join(","));
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch(API_URL, {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-  //     const data = await res.json();
+  // -----------------------------
+  // 予約確定
+  // -----------------------------
+  const confirmReservation = async () => {
+    if (selectedSeats.length === 0) {
+      setAlertMessage("座席を選択してください");
+      return;
+    }
+    if (selectedSeats.length !== allowedSeats) {
+      setAlertMessage(`${allowedSeats}席選択してください`);
+      return;
+    }
+    const formData = new URLSearchParams();
+    formData.append("reservation_id", reservationId);
+    formData.append("seats", selectedSeats.join(","));
+    setLoading(true);
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
 
-  //     if (!data.success) {
-  //       setAlertMessage(data.message ?? "予約に失敗しました");
-  //       return;
-  //     }
-  //     setSeats(prev =>
-  //       prev.map(seat =>
-  //         selectedSeats.includes(seat.id)
-  //           ? { ...seat, status: "reserved" }
-  //           : seat
-  //       )
-  //     );
-  //     setMySeats(selectedSeats);
-  //     setMode("view");
+      if (!data.success) {
+        setAlertMessage(data.message ?? "予約に失敗しました");
+        return;
+      }
+      setSeats(prev =>
+        prev.map(seat =>
+          selectedSeats.includes(seat.id)
+            ? { ...seat, status: "reserved" }
+            : seat
+        )
+      );
+      setMySeats(selectedSeats);
+      setMode("view");
 
-  //     setSelectedSeats([]);
-  //     setAlertMessage("予約完了！");
-  //   } catch {
-  //     setAlertMessage("通信に失敗しました");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      setSelectedSeats([]);
+      setAlertMessage("予約完了！");
+    } catch {
+      setAlertMessage("通信に失敗しました");
+    } finally {
+      setLoading(false);
+    }
+  };
   const renderSeat = (seat: Seat) => {
     const isMine = mySeats.includes(seat.id);
 
@@ -238,12 +238,50 @@ export default function SeatReservation() {
         key={seat.id}
         className={`seat ${seat.status} ${selectedSeats.includes(seat.id) ? "selected" : ""
           } ${isMine ? "mine" : ""}`}
-        // onClick={() => toggleSeat(seat.id)}
+        onClick={() => toggleSeat(seat.id)}
       >
         {seat.id}
       </div>
     );
   };
+
+  const cancelReservation = async () => {
+    // まず警告（標準confirmでOK）
+    const ok = window.confirm("予約を取り消しますか？この操作は元に戻せません。");
+    if (!ok) return;
+
+    setLoading(true);
+    try {
+      const formData = new URLSearchParams();
+      formData.append("mode", "cancel");
+      formData.append("reservation_id", reservationId);
+
+      const res = await fetch(API_URL, { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!data.success) {
+        setAlertMessage(data.message ?? "取消に失敗しました");
+        return;
+      }
+
+      // 取消した席を available に戻す（mySeats を使う）
+      setSeats(prev =>
+        prev.map(seat =>
+          mySeats.includes(seat.id) ? { ...seat, status: "available" } : seat
+        )
+      );
+
+      setMySeats([]);
+      setSelectedSeats([]);
+      setMode("select");
+      setAlertMessage("予約を取り消しました");
+    } catch {
+      setAlertMessage("通信に失敗しました");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div>
@@ -309,7 +347,16 @@ export default function SeatReservation() {
             </div>
           </div>
 
-          
+          {isVerified && mode === "select" && (
+            <button className="confirm-btn" onClick={confirmReservation}
+              disabled={loading || selectedSeats.length === 0 || selectedSeats.length !== allowedSeats}
+            >予約確定</button>
+          )}
+          {isVerified && mode === "view" && (
+            <button className="cancel-btn" onClick={cancelReservation} disabled={loading}>
+              予約取消
+            </button>
+          )}
 
         </>
       )}
